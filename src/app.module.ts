@@ -7,6 +7,7 @@ import config from './config';
 import { PassportModule } from '@nestjs/passport';
 import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UsersModule } from './users/users.module';
     }),
     PassportModule.register({ session: true }),
     DatabaseModule,
+    AuthModule,
     ProductsModule,
     UsersModule,
   ],

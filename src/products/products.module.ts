@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Product, ProductSchema } from './entities/product.entity';
 import { Category, CategorySchema } from './entities/category.entity';
 import { Brand, BrandSchema } from './entities/brand.entity';
-import { ProductService } from './services/products.service';
+import { ProductsService } from './services/products.service';
 import { ProductController } from './controllers/products.controller';
 import { CategoriesController } from './controllers/categories.controller';
 import { BrandsController } from './controllers/brands.controller';
@@ -18,7 +18,7 @@ import { CategoriesService } from './services/categories.service';
       { name: Brand.name, schema: BrandSchema },
     ]),
   ],
-  providers: [ProductService, BrandsService, CategoriesService],
+  providers: [ProductsService, BrandsService, CategoriesService],
   controllers: [ProductController, CategoriesController, BrandsController],
 })
 export class ProductsModule {}
