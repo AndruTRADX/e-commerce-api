@@ -3,6 +3,7 @@ import { CreateOrderDto, UpdateOrderDto } from '../dtos/order.dto';
 import { Order } from '../entities/order.entity';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { Product } from 'src/products/entities/product.entity';
 
 @Injectable()
 export class OrdersService {
@@ -56,7 +57,7 @@ export class OrdersService {
     return order.save();
   }
 
-  async addProducts(id: string, productsIds: string[]) {
+  async addProducts(id: string, productsIds: Product[]) {
     const order = await this.findOne(id);
 
     productsIds.forEach((pId) => {
