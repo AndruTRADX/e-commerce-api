@@ -19,11 +19,23 @@ export class ModeratorsService {
   }
 
   async findById(id: string) {
-    return await this.moderatorModel.findById(id);
+    const moderator = await this.moderatorModel.findById(id);
+
+    if (!moderator) {
+      throw new NotFoundException(`Moderator #${id} not found`);
+    }
+
+    return moderator;
   }
 
   async findByEmail(email: string) {
-    return await this.moderatorModel.findOne({ email }).exec();
+    const moderator = await this.moderatorModel.findOne({ email }).exec();
+
+    if (!moderator) {
+      throw new NotFoundException(`Moderator "${email}" not found`);
+    }
+
+    return moderator;
   }
 
   async create(data: CreateModeratorDto) {

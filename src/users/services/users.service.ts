@@ -15,11 +15,23 @@ export class UsersService {
   }
 
   async findById(id: string) {
-    return await this.userModel.findById(id);
+    const user = await this.userModel.findById(id);
+
+    if (!user) {
+      throw new NotFoundException(`User #${id} not found`);
+    }
+
+    return user;
   }
 
   async findByEmail(email: string) {
-    return await this.userModel.findOne({ email }).exec();
+    const user = await this.userModel.findOne({ email }).exec();
+
+    if (!user) {
+      throw new NotFoundException(`User "${email}" not found`);
+    }
+
+    return user;
   }
 
   async getOrdersByUser(userId: string) {
