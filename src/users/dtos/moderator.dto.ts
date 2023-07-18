@@ -10,6 +10,7 @@ export class CreateModeratorDto {
   @IsEmail()
   readonly email: string;
 
+  @IsString()
   @IsNotEmpty()
   readonly password: string;
 }

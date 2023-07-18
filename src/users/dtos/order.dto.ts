@@ -1,15 +1,11 @@
-import { IsMongoId, IsNotEmpty, IsDate, IsArray } from 'class-validator';
+import { IsMongoId, IsNotEmpty, IsArray } from 'class-validator';
 import { OmitType, PartialType } from '@nestjs/mapped-types';
 import { Product } from 'src/products/entities/product.entity';
 
 export class CreateOrderDto {
   @IsNotEmpty()
   @IsMongoId()
-  readonly customer: string;
-
-  @IsDate()
-  @IsNotEmpty()
-  readonly date: Date;
+  readonly user: string;
 
   @IsArray()
   @IsNotEmpty()

@@ -8,10 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ModeratorsService } from '../services/moderators.service';
-import {
-  CreateModeratorDto,
-  UpdateModeratorDto,
-} from '../dtos/moderator.entity';
+import { CreateModeratorDto, UpdateModeratorDto } from '../dtos/moderator.dto';
 
 @Controller('moderators')
 export class ModeratorsController {

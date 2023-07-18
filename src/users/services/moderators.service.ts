@@ -6,10 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { Moderator } from '../entities/moderator.entity';
 import { Role } from 'src/auth/models/roles.model';
 
-import {
-  CreateModeratorDto,
-  UpdateModeratorDto,
-} from '../dtos/moderator.entity';
+import { CreateModeratorDto, UpdateModeratorDto } from '../dtos/moderator.dto';
 
 @Injectable()
 export class ModeratorsService {
