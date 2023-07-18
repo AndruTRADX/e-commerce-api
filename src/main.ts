@@ -32,6 +32,6 @@ async function bootstrap() {
   app.use(passport.session());
   app.enableCors();
 
-  await app.listen(process.env.DATABASE_PORT || 3000);
+  await app.listen(process.env.DATABASE_PORT || 3000, '0.0.0.0');
 }
 bootstrap();
