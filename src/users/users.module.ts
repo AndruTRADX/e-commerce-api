@@ -20,5 +20,6 @@ import { Order, OrderSchema } from './entities/order.entity';
   ],
   controllers: [ModeratorsController, UsersController, OrdersController],
   providers: [UsersService, ModeratorsService, OrdersService],
+  exports: [UsersService, ModeratorsService],
 })
 export class UsersModule {}

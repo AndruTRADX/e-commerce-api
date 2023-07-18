@@ -27,8 +27,6 @@ export class ProductsService {
 
       return await this.productModel
         .find(filters)
-        .populate('category')
-        .populate('brand')
         .skip(offset * limit)
         .limit(limit)
         .exec();

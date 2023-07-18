@@ -12,10 +12,6 @@ export class CreateModeratorDto {
 
   @IsNotEmpty()
   readonly password: string;
-
-  @IsString()
-  @IsNotEmpty()
-  readonly role: string;
 }
 
 export class UpdateModeratorDto extends PartialType(CreateModeratorDto) {}
