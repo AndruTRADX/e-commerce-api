@@ -28,7 +28,7 @@ export class UsersService {
     const user = await this.userModel.findOne({ email }).exec();
 
     if (!user) {
-      throw new NotFoundException(`User "${email}" not found`);
+      return null;
     }
 
     return user;

@@ -32,7 +32,7 @@ export class ModeratorsService {
     const moderator = await this.moderatorModel.findOne({ email }).exec();
 
     if (!moderator) {
-      throw new NotFoundException(`Moderator "${email}" not found`);
+      return null;
     }
 
     return moderator;
