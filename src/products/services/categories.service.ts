@@ -23,11 +23,29 @@ export class CategoriesService {
   }
 
   async findOneByName(name: string) {
-    const category = await this.categoryModel.findOne({ name });
+    const category = await this.categoryModel
+      .findOne({
+        name: { $regex: name, $options: 'i' },
+      })
+      .exec();
+
     if (!category) {
       throw new NotFoundException(`Category ${name} not found`);
     }
     return category;
+  }
+
+  async findCategoryIdByName(name: string) {
+    const categories = await this.categoryModel.find({
+      $or: [{ name: { $regex: name, $options: 'i' } }],
+    });
+
+    if (categories.length === 0) {
+      return [];
+    }
+
+    const categoriesIds = categories.map((category) => category._id.toString());
+    return categoriesIds;
   }
 
   create(data: CreateCategoryDto) {

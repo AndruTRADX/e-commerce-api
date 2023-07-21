@@ -8,11 +8,15 @@ import {
   UpdateProductDto,
   FilterProductsDto,
 } from '../dtos/product.dto';
+import { CategoriesService } from './categories.service';
+import { BrandsService } from './brands.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectModel(Product.name) private productModel: Model<Product>,
+    private categoriesService: CategoriesService,
+    private brandsService: BrandsService,
   ) {}
 
   async findAll(param?: FilterProductsDto) {
@@ -45,6 +49,63 @@ export class ProductsService {
       throw new NotFoundException(`Product #${id} not found`);
     }
     return product;
+  }
+
+  async searchProducts(query: string) {
+    const products = await this.productModel
+      .find({
+        $or: [
+          { name: { $regex: query, $options: 'i' } },
+          {
+            category: {
+              $in: await this.categoriesService.findCategoryIdByName(query),
+            },
+          },
+          {
+            brand: {
+              $in: await this.brandsService.findBrandIdByName(query),
+            },
+          },
+        ],
+      })
+      .populate('category')
+      .populate('brand')
+      .exec();
+
+    if (!products) {
+      return null;
+    }
+    return products;
+  }
+
+  async findProductsByCategoryId(categoryId: string) {
+    try {
+      const products = await this.productModel
+        .find({
+          category: categoryId,
+        })
+        .exec();
+
+      return products;
+    } catch (error) {
+      throw new NotFoundException(
+        'Error when searching for products by category',
+      );
+    }
+  }
+
+  async findProductsByBrandId(brandId: string) {
+    try {
+      const products = await this.productModel
+        .find({
+          brand: brandId,
+        })
+        .exec();
+
+      return products;
+    } catch (error) {
+      throw new NotFoundException('Error when searching for products by brand');
+    }
   }
 
   async create(data: CreateProductDto) {

@@ -41,6 +41,24 @@ export class ProductController {
     return this.productsService.findOne(id);
   }
 
+  @Public()
+  @Get('search/:query')
+  searcher(@Param('query') query: string) {
+    return this.productsService.searchProducts(query);
+  }
+
+  @Public()
+  @Get('category/:categoryId')
+  getByCategory(@Param('categoryId', MongoIdPipe) categoryId: string) {
+    return this.productsService.findProductsByCategoryId(categoryId);
+  }
+
+  @Public()
+  @Get('brand/:brandId')
+  getByBrand(@Param('brandId', MongoIdPipe) brandId: string) {
+    return this.productsService.findProductsByBrandId(brandId);
+  }
+
   @Roles(Role.MODERATOR)
   @Post()
   create(@Body() payload: CreateProductDto) {

@@ -21,11 +21,29 @@ export class BrandsService {
   }
 
   async findOneByName(name: string) {
-    const brand = await this.brandModel.findOne({ name });
+    const brand = await this.brandModel
+      .findOne({
+        name: { $regex: name, $options: 'i' },
+      })
+      .exec();
+
     if (!brand) {
       throw new NotFoundException(`Brand ${name} not found`);
     }
     return brand;
+  }
+
+  async findBrandIdByName(name: string) {
+    const brands = await this.brandModel.find({
+      $or: [{ name: { $regex: name, $options: 'i' } }],
+    });
+
+    if (brands.length === 0) {
+      return [];
+    }
+
+    const brandIds = brands.map((brand) => brand.name.toString());
+    return brandIds;
   }
 
   create(data: CreateBrandDto) {
