@@ -43,4 +43,10 @@ export class AuthService {
 
     return { access_token: this.jwtService.sign(payload) };
   }
+
+  async getUserByToken(rawAccessToken: string) {
+    const user = await this.userService.findByToken(rawAccessToken);
+    const moderator = await this.moderatorService.findByToken(rawAccessToken);
+    return user ? user : moderator;
+  }
 }

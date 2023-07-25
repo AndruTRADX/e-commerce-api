@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 import { User } from '../entities/user.entity';
@@ -8,7 +9,10 @@ import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<User>,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async findAll() {
     return await this.userModel.find().exec();
@@ -18,7 +22,7 @@ export class UsersService {
     const user = await this.userModel.findById(id);
 
     if (!user) {
-      throw new NotFoundException(`User #${id} not found`);
+      return null;
     }
 
     return user;
@@ -26,6 +30,20 @@ export class UsersService {
 
   async findByEmail(email: string) {
     const user = await this.userModel.findOne({ email }).exec();
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  }
+
+  async findByToken(rawAccessToken: string) {
+    const accessToken = rawAccessToken.replace('Bearer ', '');
+    const decodedToken = this.jwtService.verify(accessToken);
+    const userId = decodedToken.sub;
+
+    const user = await this.findById(userId);
 
     if (!user) {
       return null;

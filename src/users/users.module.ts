@@ -9,6 +9,9 @@ import { OrdersController } from './controllers/orders.controller';
 import { Moderator, ModeratorSchema } from './entities/moderator.entity';
 import { User, UserSchema } from './entities/user.entity';
 import { Order, OrderSchema } from './entities/order.entity';
+import { JwtModule } from '@nestjs/jwt';
+import config from 'src/config';
+import { ConfigType } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -17,6 +20,17 @@ import { Order, OrderSchema } from './entities/order.entity';
       { name: User.name, schema: UserSchema },
       { name: Order.name, schema: OrderSchema },
     ]),
+    JwtModule.registerAsync({
+      inject: [config.KEY],
+      useFactory: (configiService: ConfigType<typeof config>) => {
+        return {
+          secret: configiService.jwt.secret,
+          signOptions: {
+            expiresIn: '10d',
+          },
+        };
+      },
+    }),
   ],
   controllers: [ModeratorsController, UsersController, OrdersController],
   providers: [UsersService, ModeratorsService, OrdersService],

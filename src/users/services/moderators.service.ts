@@ -7,11 +7,13 @@ import { Moderator } from '../entities/moderator.entity';
 import { Role } from 'src/auth/models/roles.model';
 
 import { CreateModeratorDto, UpdateModeratorDto } from '../dtos/moderator.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class ModeratorsService {
   constructor(
     @InjectModel(Moderator.name) private moderatorModel: Model<Moderator>,
+    private readonly jwtService: JwtService,
   ) {}
 
   async findAll() {
@@ -22,7 +24,7 @@ export class ModeratorsService {
     const moderator = await this.moderatorModel.findById(id);
 
     if (!moderator) {
-      throw new NotFoundException(`Moderator #${id} not found`);
+      return null;
     }
 
     return moderator;
@@ -30,6 +32,20 @@ export class ModeratorsService {
 
   async findByEmail(email: string) {
     const moderator = await this.moderatorModel.findOne({ email }).exec();
+
+    if (!moderator) {
+      return null;
+    }
+
+    return moderator;
+  }
+
+  async findByToken(rawAccessToken: string) {
+    const accessToken = rawAccessToken.replace('Bearer ', '');
+    const decodedToken = this.jwtService.verify(accessToken);
+    const moderatorId = decodedToken.sub;
+
+    const moderator = await this.findById(moderatorId);
 
     if (!moderator) {
       return null;
