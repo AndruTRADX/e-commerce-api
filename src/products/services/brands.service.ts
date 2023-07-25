@@ -42,8 +42,8 @@ export class BrandsService {
       return [];
     }
 
-    const brandIds = brands.map((brand) => brand.name.toString());
-    return brandIds;
+    const brandsIds = brands.map((brand) => brand._id.toString());
+    return brandsIds;
   }
 
   create(data: CreateBrandDto) {
