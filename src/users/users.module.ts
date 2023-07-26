@@ -12,6 +12,7 @@ import { Order, OrderSchema } from './entities/order.entity';
 import { JwtModule } from '@nestjs/jwt';
 import config from 'src/config';
 import { ConfigType } from '@nestjs/config';
+import { ProductsModule } from 'src/products/products.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ConfigType } from '@nestjs/config';
         };
       },
     }),
+    ProductsModule,
   ],
   controllers: [ModeratorsController, UsersController, OrdersController],
   providers: [UsersService, ModeratorsService, OrdersService],

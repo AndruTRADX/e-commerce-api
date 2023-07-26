@@ -10,11 +10,7 @@ import {
 } from '@nestjs/common';
 
 import { OrdersService } from '../services/orders.service';
-import {
-  CreateOrderDto,
-  UpdateOrderDto,
-  AddProductsToOrderDto,
-} from '../dtos/order.dto';
+import { CreateOrderDto, UpdateOrderDto } from '../dtos/order.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Public } from 'src/auth/decorators/public.decorator';
@@ -54,12 +50,12 @@ export class OrdersController {
     return this.ordersService.update(id, payload);
   }
 
-  @Put(':id/products')
+  @Put(':id/product/:productId')
   updateProducts(
     @Param('id') id: string,
-    @Body() payload: AddProductsToOrderDto,
+    @Param('productId') productId: string,
   ) {
-    return this.ordersService.addProducts(id, payload.productsIds);
+    return this.ordersService.addProducts(id, productId);
   }
 
   @Delete(':id')
