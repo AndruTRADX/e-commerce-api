@@ -43,6 +43,12 @@ export class OrdersController {
     return this.ordersService.findOne(id);
   }
 
+  @Public()
+  @Get(':userId')
+  getByUser(@Param('userId') userId: string) {
+    return this.ordersService.findOneByUserId(userId);
+  }
+
   @Post()
   async create(@Body() payload: CreateOrderDto, @Req() request) {
     const accessToken = request.headers.authorization;
