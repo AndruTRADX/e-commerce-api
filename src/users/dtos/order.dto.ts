@@ -1,12 +1,11 @@
 import { IsNotEmpty, IsArray, IsMongoId } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 import { Product } from 'src/products/entities/product.entity';
-import { User } from '../entities/user.entity';
 
 export class CreateOrderDto {
   @IsMongoId()
   @IsNotEmpty()
-  readonly user: User;
+  readonly user: string;
 }
 
 export class UpdateOrderDto extends PartialType(CreateOrderDto) {}

@@ -4,10 +4,14 @@ import { Order } from '../entities/order.entity';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Product } from 'src/products/entities/product.entity';
+import { UsersService } from './users.service';
 
 @Injectable()
 export class OrdersService {
-  constructor(@InjectModel(Order.name) private orderModel: Model<Order>) {}
+  constructor(
+    @InjectModel(Order.name) private orderModel: Model<Order>,
+    private userSerice: UsersService,
+  ) {}
 
   findAll() {
     return this.orderModel.find().populate('products').populate('user').exec();
@@ -35,15 +39,12 @@ export class OrdersService {
       .populate('products')
       .exec();
 
-    if (!order) {
-      return null;
-    }
-
     return order;
   }
 
   async create(data: CreateOrderDto) {
-    const newModel = new this.orderModel(data);
+    const user = await this.userSerice.findById(data.user);
+    const newModel = new this.orderModel({ user });
 
     const createdOrder = await newModel.save();
     return createdOrder;
