@@ -36,7 +36,7 @@ export class OrdersService {
       .exec();
 
     if (!order) {
-      throw new NotFoundException(`Order for user #${userId} not found`);
+      return null;
     }
 
     return order;
