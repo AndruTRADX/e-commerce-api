@@ -29,11 +29,6 @@ export class UsersController {
     return this.usersService.findByEmail(email);
   }
 
-  @Get(':id/orders')
-  getOrders(@Param('id') id: string) {
-    return this.usersService.getOrdersByUser(id);
-  }
-
   @Post()
   create(@Body() payload: CreateUserDto) {
     return this.usersService.create(payload);

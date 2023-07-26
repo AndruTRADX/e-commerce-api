@@ -44,9 +44,9 @@ export class OrdersController {
   }
 
   @Public()
-  @Get(':userId')
-  getByUser(@Param('userId') userId: string) {
-    return this.ordersService.findOneByUserId(userId);
+  @Get('user/:id')
+  getByUser(@Param('id') id: string) {
+    return this.ordersService.findOneByUserId(id);
   }
 
   @Post()
