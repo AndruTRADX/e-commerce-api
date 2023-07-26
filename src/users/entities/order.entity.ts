@@ -12,7 +12,7 @@ export class Order extends Document {
   @Prop({ type: Types.ObjectId, ref: User.name })
   user: User;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: Product.name }] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: Product.name, default: [] }] })
   products: Types.Array<Product>;
 }
 

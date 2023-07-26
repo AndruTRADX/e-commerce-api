@@ -4,6 +4,7 @@ import { Order } from '../entities/order.entity';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Product } from 'src/products/entities/product.entity';
+import { User } from '../entities/user.entity';
 
 @Injectable()
 export class OrdersService {
@@ -14,7 +15,10 @@ export class OrdersService {
   }
 
   async findOne(id: string) {
-    const order = await this.orderModel.findById(id);
+    const order = await this.orderModel
+      .findById(id)
+      .populate('products')
+      .exec();
 
     if (!order) {
       throw new NotFoundException(`Order #${id} not found`);
@@ -23,9 +27,25 @@ export class OrdersService {
     return order;
   }
 
-  create(data: CreateOrderDto) {
+  async findOneByUserId(userId: string) {
+    const order = await this.orderModel
+      .findOne({ user: userId })
+      .populate('products')
+      .exec();
+
+    if (!order) {
+      throw new NotFoundException(`Order for user #${userId} not found`);
+    }
+
+    return order;
+  }
+
+  async create(data: CreateOrderDto, userSend: User) {
     const newModel = new this.orderModel(data);
-    return newModel.save();
+    newModel.user = userSend._id;
+
+    const createdOrder = await newModel.save();
+    return createdOrder;
   }
 
   async update(id: string, changes: UpdateOrderDto) {

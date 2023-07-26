@@ -52,15 +52,6 @@ export class UsersService {
     return user;
   }
 
-  async getOrdersByUser(userId: string) {
-    const user = await this.findById(userId);
-    return {
-      date: new Date(),
-      user,
-      products: [],
-    };
-  }
-
   async create(data: CreateUserDto) {
     const newModel = new this.userModel(data);
     const hashPassword = await bcrypt.hash(newModel.password, 10);
