@@ -4,7 +4,6 @@ import { Order } from '../entities/order.entity';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Product } from 'src/products/entities/product.entity';
-import { User } from '../entities/user.entity';
 
 @Injectable()
 export class OrdersService {
@@ -43,9 +42,8 @@ export class OrdersService {
     return order;
   }
 
-  async create(data: CreateOrderDto, userSend: User) {
+  async create(data: CreateOrderDto) {
     const newModel = new this.orderModel(data);
-    newModel.user = userSend._id;
 
     const createdOrder = await newModel.save();
     return createdOrder;

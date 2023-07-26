@@ -2,7 +2,6 @@ import {
   Controller,
   Get,
   Param,
-  Req,
   Post,
   Body,
   Put,
@@ -21,15 +20,11 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/models/roles.model';
-import { UsersService } from '../services/users.service';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('orders')
 export class OrdersController {
-  constructor(
-    private ordersService: OrdersService,
-    private userService: UsersService,
-  ) {}
+  constructor(private ordersService: OrdersService) {}
 
   @Roles(Role.MODERATOR)
   @Get()
@@ -50,10 +45,8 @@ export class OrdersController {
   }
 
   @Post()
-  async create(@Body() payload: CreateOrderDto, @Req() request) {
-    const accessToken = request.headers.authorization;
-    const user = await this.userService.findByToken(accessToken);
-    return this.ordersService.create(payload, user);
+  async create(@Body() payload: CreateOrderDto) {
+    return this.ordersService.create(payload);
   }
 
   @Put(':id')
